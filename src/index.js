@@ -1,6 +1,8 @@
 import { isFSA } from 'flux-standard-action';
 
 export default (track, select = ({ meta }) => meta.analytics) => store => next => action => {
+  const oldState = store.getState();
+
   const returnValue = next(action);
 
   if (!action || !action.meta) {
@@ -19,7 +21,7 @@ export default (track, select = ({ meta }) => meta.analytics) => store => next =
     return returnValue;
   }
 
-  track(event, store.getState());
+  track(event, oldState, store.getState());
 
   return returnValue;
 };
